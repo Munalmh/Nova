@@ -1,8 +1,8 @@
 <div align="center">
-  <img src="./src/assets/hero.png" alt="Nova Header Banner" width="100%" style="border-radius: 12px; margin-bottom: 20px;" />
-
   # 🌌 Nova
   ### Premium Glassmorphic AI Chat Experience
+
+  [Live Demo](https://nova-sigma-three.vercel.app/)
 </div>
 
 ---
