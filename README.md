@@ -3,156 +3,48 @@
 
   # 🌌 Nova
   ### Premium Glassmorphic AI Chat Experience
-
-  [![React](https://img.shields.io/badge/React-19-blue.svg?logo=react&logoColor=white)](https://react.dev/)
-  [![Vite](https://img.shields.io/badge/Vite-8-646CFF.svg?logo=vite&logoColor=white)](https://vite.dev/)
-  [![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6.svg?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-  [![Tailwind CSS v4](https://img.shields.io/badge/Tailwind_CSS-v4.0-06B6D4.svg?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
-  [![Framer Motion](https://img.shields.io/badge/Framer_Motion-12-FF00C1.svg?logo=framer&logoColor=white)](https://www.framer.com/motion/)
-  [![Zustand](https://img.shields.io/badge/Zustand-5-black.svg)](https://zustand-demo.pmnd.rs/)
-
-  <p align="center">
-    Nova is a sleek, modern, and high-performance AI chat interface built to deliver an exceptionally premium chat environment. Powered by React 19, Tailwind CSS v4, and Zustand, it provides fluid glassmorphic visual aesthetics, advanced streaming response emulation, and persistent multi-thread management.
-  </p>
-
-  [Key Features](#-key-features) • [Tech Stack](#-tech-stack) • [Getting Started](#-getting-started) • [Shortcuts](#-keyboard-shortcuts) • [Architecture](#-under-the-hood)
 </div>
 
 ---
 
-## 🌟 Key Features
+> A premium, glassmorphic AI chat experience built with React 19, Vite 8, and Tailwind CSS v4.
 
-Nova combines cutting-edge web technologies with a refined design system to create a state-of-the-art interactive workspace:
+## ⚡ Quick Start
 
-- **💎 Sleek Glassmorphic UI**: Ambient gradients, dynamic backdrop blurring (`backdrop-filter`), and fine-tuned HSL borders that react elegantly to theme toggles.
-- **⚡ Real-Time Streaming Engine**: Emulated token streaming via `ReadableStream` reader APIs, creating natural response pacing.
-- **📝 Live Markdown Rendering**: Supports comprehensive formatting (bold, italics, ordered lists, embedded links) dynamically rendered on the fly.
-- **💻 Real-Time Syntax Highlighting**: Automatic detection and syntax colorization of multi-language code snippets (TypeScript, TSX, Python, etc.) as the response streams in.
-- **⚙️ Custom System Personas**: Modify the system prompt instruction via a beautiful configuration modal to change Nova's cognitive behavior (e.g. senior programmer, pirate, etc.).
-- **💾 Zustand Local Persistence**: Chat histories are stored automatically in browser `localStorage` under isolated thread keys.
-- **⌨️ Keyboard Navigation**: Work faster using shortcuts like `Ctrl + K` or `Cmd + K` to start a new chat instantly.
-- **📱 Fully Responsive Design**: Fluid sidebar transitions using Framer Motion spring physics, adapting seamlessly across mobile, tablet, and desktop viewports.
+```bash
+# Clone the repository
+git clone https://github.com/Munalmh/Nova.git
+cd Nova
+
+# Install dependencies
+npm install
+
+# Start the dev server
+npm run dev
+```
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Technology | Purpose | Key Benefit |
-| :--- | :--- | :--- |
-| **React 19** | Core Library | Next-gen rendering performance & clean component models. |
-| **Vite 8** | Build Tooling | Lightning-fast Hot Module Replacement (HMR) and Rolldown bundling. |
-| **TypeScript 6** | Language | Strong compile-time typing for stable development. |
-| **Tailwind CSS v4** | CSS Compiler | Next-gen CSS variables utility design and `@import "tailwindcss"` engine. |
-| **Framer Motion 12** | Animation | Physics-based fluid transitions and micro-animations. |
-| **Zustand 5** | State Management | Centralized, persistent global application state. |
-
----
-
-## 🚀 Getting Started
-
-Follow these steps to spin up your own local development instance of Nova:
-
-### 1. Prerequisites
-Ensure you have **Node.js** (v18+) and **npm** installed on your machine.
-
-### 2. Clone the Repository
-```bash
-git clone https://github.com/Munalmh/Nova.git
-cd Nova
-```
-
-### 3. Install Dependencies
-```bash
-npm install
-```
-
-### 4. Run the Development Server
-```bash
-npm run dev
-```
-This boots up the Vite development server. Open [http://localhost:5173/](http://localhost:5173/) in your browser.
-
-### 5. Build for Production
-```bash
-npm run build
-```
-Generates a highly optimized minified production bundle in the `dist/` directory.
+- **React 19** & **TypeScript** — UI & Logic Engine
+- **Vite 8** — Next-gen Fast Build Tooling
+- **Tailwind CSS v4** — High-performance Utility Styling
+- **Framer Motion 12** — Fluid Spring Animations
+- **Zustand 5** — Persistent Global State
 
 ---
 
 ## ⌨️ Keyboard Shortcuts
 
-Nova is designed for power users. Boost your productivity with these built-in hotkeys:
-
-| Action | macOS Shortcut | Windows / Linux Shortcut |
+| Action | Windows / Linux | macOS |
 | :--- | :--- | :--- |
-| **Start New Chat** | `Cmd + K` | `Ctrl + K` |
+| **New Chat** | `Ctrl + K` | `Cmd + K` |
 | **Send Message** | `Enter` | `Enter` |
-| **Insert Newline** | `Shift + Enter` | `Shift + Enter` |
-
----
-
-## 🔍 Under the Hood
-
-### 1. Persistent Thread State (`useChatStore.ts`)
-We use Zustand with the `persist` middleware to handle multi-chat indexing, active state tracking, and local storage serialization seamlessly:
-
-```typescript
-export const useChatStore = create<ChatState>()(
-  persist(
-    (set) => ({
-      chats: [],
-      currentChatId: null,
-      systemPrompt: "You are a helpful, creative, clever, and very friendly assistant.",
-      theme: 'dark',
-      isSidebarOpen: true,
-      // ... Actions for CRUD operations, theme and sidebar toggles
-    }),
-    { name: 'ai-chat-storage' }
-  )
-);
-```
-
-### 2. Emulated Chunk Streaming (`mockStream.ts`)
-Nova emulates raw API server response chunks using browser standard `ReadableStream` generators:
-
-```typescript
-export async function mockFetchStream(prompt: string): Promise<Response> {
-  const responseText = getResponseForPrompt(prompt);
-  const encoder = new TextEncoder();
-  
-  const stream = new ReadableStream({
-    async start(controller) {
-      const tokens = responseText.split(' ');
-      for (const token of tokens) {
-        await new Promise((resolve) => setTimeout(resolve, 20 + Math.random() * 40));
-        controller.enqueue(encoder.encode(token + ' '));
-      }
-      controller.close();
-    },
-  });
-
-  return new Response(stream);
-}
-```
-
----
-
-## 🎨 Styling Architecture
-
-Nova features a premium **glassmorphism** design theme centered around CSS variables tied directly into the Tailwind v4 compilation pipeline:
-
-```css
-.glass-morphism {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-```
+| **Newline** | `Shift + Enter` | `Shift + Enter` |
 
 ---
 
 <div align="center">
-  <p>Created with 🌌 by Munalmh</p>
+  <sub>Created with 🌌 by Munalmh</sub>
 </div>
