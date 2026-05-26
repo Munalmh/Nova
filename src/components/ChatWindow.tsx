@@ -7,7 +7,7 @@ import { useChatStore } from '../store/useChatStore';
 import type { Message } from '../store/useChatStore';
 import { mockFetchStream } from '../api/mockStream';
 import { useAutoScroll } from '../hooks/useAutoScroll';
-import { Menu, PanelLeftOpen, Terminal } from 'lucide-react';
+import { PanelLeftOpen, Terminal } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const ChatWindow: React.FC = () => {
@@ -18,8 +18,7 @@ export const ChatWindow: React.FC = () => {
     updateLastMessage, 
     createNewChat, 
     isSidebarOpen, 
-    toggleSidebar,
-    theme
+    toggleSidebar
   } = useChatStore();
   
   const [isStreaming, setIsStreaming] = useState(false);
