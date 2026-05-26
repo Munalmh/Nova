@@ -7,10 +7,10 @@ import { useChatStore } from '../store/useChatStore';
 import type { Message } from '../store/useChatStore';
 import { mockFetchStream } from '../api/mockStream';
 import { useAutoScroll } from '../hooks/useAutoScroll';
-import { PanelLeftOpen, Terminal } from 'lucide-react';
+import { PanelLeftOpen, Terminal, ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export const ChatWindow: React.FC = () => {
+export const ChatWindow: React.FC<{ onBackToLanding?: () => void }> = ({ onBackToLanding }) => {
   const { 
     chats, 
     currentChatId, 
@@ -103,6 +103,15 @@ export const ChatWindow: React.FC = () => {
             {!isSidebarOpen && (
               <button onClick={toggleSidebar} className="p-2 -ml-2 rounded-xl hover:bg-muted transition-colors text-muted-foreground">
                 <PanelLeftOpen size={20} />
+              </button>
+            )}
+            {onBackToLanding && (
+              <button 
+                onClick={onBackToLanding} 
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl hover:bg-muted transition-all text-muted-foreground hover:text-foreground text-xs font-semibold border border-border/50 bg-secondary/20 hover:scale-102 cursor-pointer"
+              >
+                <ArrowLeft size={14} />
+                <span>Home</span>
               </button>
             )}
             <div className="flex items-center gap-2">
